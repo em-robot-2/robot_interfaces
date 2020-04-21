@@ -4,6 +4,7 @@
  *            reserved.
  * @license BSD 3-clause
  */
+#include <iostream>
 #include <csignal>
 #include <robot_interfaces/global_signal_handler.hpp>
 
@@ -28,6 +29,7 @@ void GlobalSignalHandler::signal_handler(int signal)
     if (signal == SIGINT)
     {
         received_sigint_ = true;
+        std::cout << "SIGINT" << std::endl;
     }
 }
 

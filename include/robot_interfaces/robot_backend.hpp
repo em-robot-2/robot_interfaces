@@ -72,13 +72,16 @@ public:
 
     virtual ~RobotBackend()
     {
+        std::cout << "BACK DESTRUCTION" << std::endl;
         // Release the GIL when destructing the backend, as otherwise the
         // program will get stuck in a dead lock in case the driver needs to run
         // some Python code.
         pybind11::gil_scoped_release release;
 
         request_shutdown();
+        std::cout << "JOIN" << std::endl;
         thread_->join();
+        std::cout << "JOINED" << std::endl;
     }
 
     uint32_t get_max_action_repetitions()
@@ -132,6 +135,11 @@ public:
         {
             real_time_tools::Timer::sleep_microseconds(100000);
         }
+    }
+
+    bool is_running() const
+    {
+        return loop_is_running_;
     }
 
 private:
@@ -319,9 +327,11 @@ private:
                 timer_.print_statistics();
             }
         }
+        std::cout << "END LOOP" << std::endl;
 
         robot_driver_->shutdown();
         loop_is_running_ = false;
+        std::cout << "QUIT" << std::endl;
     }
 };
 
